@@ -101,8 +101,6 @@ private:
     }
 
     void endDrag(sf::RenderWindow& window) {
-        sf::Vector2i mouseEndPos = sf::Mouse::getPosition(window);
-
         float vX = dragStart.x - dragEnd.x;
         float vY = dragStart.y - dragEnd.y;
 

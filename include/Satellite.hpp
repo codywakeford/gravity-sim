@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <array>
 #include <iostream>
+#include "utils.hpp"
 // #include "font.cpp"
 
 #ifndef SATELLITE_HPP
@@ -8,12 +9,12 @@
 
 class Satellite {
 private:
-    sf::CircleShape body;
     sf::Text massText;
 
 public:
-    sf::Vector2f velocity = {0.0f, 0.0f};
+    sf::CircleShape body;
     sf::Vector2f position = {0.0f, 0.0};
+    sf::Vector2f velocity = {0.0f, 0.0f};
     sf::Vector2f force = {0.0f, 0.0f};
 
     float radius;
@@ -21,11 +22,12 @@ public:
 
     Satellite(sf::Vector2f position, float radius, sf::Vector2f velocity, sf::Color color)
         : body(radius), position(position), velocity(velocity) {
-            body.setPosition(position);
-            body.setFillColor(color);
-            body.setOrigin(radius, radius);
+        body.setRadius(radius);
+        body.setPosition(position);
+        body.setFillColor(color);
+        body.setOrigin(radius, radius);
 
-            mass = 3.14159f * radius * radius;
+        mass = 3.14159f * radius * radius;
             
     }
 

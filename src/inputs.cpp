@@ -12,6 +12,10 @@ void processEvents(sf::RenderWindow& window) {
             window.close();
     }
 
+    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R) {
+        gameObjects.clear();
+    }
+
     mouse.input(event, window);
 }
 

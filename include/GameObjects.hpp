@@ -4,6 +4,7 @@
 #include <vector>
 #include <array>
 #include <cmath>
+#include "utils.hpp"
 
 #ifndef GAME_OBJECTS_HPP
 #define GAME_OBJECTS_HPP
@@ -18,6 +19,10 @@ public:
         for (Satellite& body : this->bodies) {
             body.render(window);
         }
+    }
+
+    void clear() {
+        bodies.clear();
     }
 
     void add_satellite(float radius, sf::Vector2f velocity, sf::RenderWindow& window) {
@@ -39,7 +44,7 @@ private:
 
             float minDistance = 50.0f;
             float dampingFactor = 0.2f;
-            float bigG = 0.1f;
+            float bigG = 0; // 0.1f;
 
             float forceX = 0.0f;
             float forceY = 0.0f;
@@ -86,23 +91,35 @@ private:
                 Satellite& body2 = bodies[j];
 
                 float dX = body1.position.x - body2.position.x;
-                float dY = body2.position.y - body2.position.y;
+                float dY = body1.position.y - body2.position.y;
+
                 float distance = std::sqrt(dX * dX + dY * dY);
 
-                if (distance < (body2.radius + body1.radius)) {
-                    float overlap = distance - (body2.radius - body2.radius);
+                float sumOfRadii = body1.body.getRadius() + body2.body.getRadius();
+
+                if (distance < sumOfRadii) {
+                    // Calculate the overlap distance
+                    // float overlap = sumOfRadii - distance;
+
+                    // get normal direction
+                    // get relative mass
+                    // give that ratio of momentum to the object - it from the old one
+
+                    float collisionNormalX = dX / distance;
+                    float collisionNormalY = dY / distance;
+
+                    // find normal magnitude
+                    // share momentum on this vector
+
+                    float relativeMass = body1.mass / body2.mass + 1;
+
+                    body1.velocity += body2.velocity * relativeMass;
+                    body2.velocity -= body1.velocity * relativeMass;
                 }
             }
         }
     }
 
-    bool areCirclesOverlapping(const sf::Vector2f& pos1, float radius1, const sf::Vector2f& pos2, float radius2) {
-        float dx = pos2.x - pos1.x;
-        float dy = pos2.y - pos1.y;
-        float distance = std::sqrt(dx * dx + dy * dy);
-
-        return distance <= (radius1 + radius2);
-    }
 };
 
 extern GameObjects gameObjects;
