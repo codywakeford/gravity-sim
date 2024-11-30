@@ -5,11 +5,13 @@
 #include "GameObjects.hpp" 
 #include "Mouse.hpp"
 #include "window.cpp"
+// #include "Slider.hpp"
 
 GameObjects gameObjects;
 Mouse mouse;
 
-void awaitFrame(sf::Clock clock) {
+void awaitFrame(sf::Clock clock)
+{
     sf::Time deltaTime = clock.restart();
     if (deltaTime.asSeconds() < TIME_PER_FRAME) {
         sf::sleep(sf::seconds(TIME_PER_FRAME - deltaTime.asSeconds()));
@@ -18,6 +20,7 @@ void awaitFrame(sf::Clock clock) {
 }
 
 int main() {
+
     window.setFramerateLimit(120);
     sf::Clock clock;
 

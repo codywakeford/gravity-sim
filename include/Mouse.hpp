@@ -21,7 +21,9 @@ private:
 
 public:
     Mouse(float x = 0.0f, float y = 0.0f, float radius = 25.0f)
-            : x(x), y(y), radius(radius), shape(radius) {}
+            : x(x), y(y), radius(radius), shape(radius) {
+        shape.setOrigin(radius, radius);
+    }
 
     void input(sf::Event& event, sf::RenderWindow& window) {
         switch (event.type) {
@@ -57,7 +59,7 @@ public:
     void render(sf::RenderWindow& window) {
         sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
 
-        shape.setPosition(mousePosition.x - radius, mousePosition.y - radius);
+        shape.setPosition(mousePosition.x, mousePosition.y);
         shape.setFillColor(color);
         window.draw(this->shape);
 
@@ -76,13 +78,14 @@ private:
     void changeSatelliteSize(sf::Event& event) {
         if (event.type == sf::Event::MouseWheelScrolled) {
             if (event.mouseWheelScroll.delta > 0) {
-                radius += 5;
+                radius += 3;
             } else {
-                if (radius > 5) {
-                    radius -= 5;
+                if (radius > 3) {
+                    radius -= 3;
                 }
             }
         }
+        shape.setOrigin(radius, radius);
         shape.setRadius(radius);
     }
 
