@@ -23,7 +23,7 @@ int main() {
 
     // 120hz loop
     while (window.isOpen()) {
-        processEvents(window);       
+        processEvents(window);
         step(window);
         render(window);
         awaitFrame(clock);
