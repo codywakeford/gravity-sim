@@ -5,9 +5,11 @@
 #include "GameObjects.hpp" 
 #include "Mouse.hpp"
 #include "window.cpp"
-// #include "Slider.hpp"
+#include "QuadTree.hpp"
 
-GameObjects gameObjects;
+
+Quadtree quadtree(Rectangle(0, 0, 200, 200));
+GameObjects gameObjects(quadtree);
 Mouse mouse;
 
 void awaitFrame(sf::Clock clock)

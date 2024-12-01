@@ -5,6 +5,8 @@
 #include <array>
 #include <cmath>
 #include "utils.hpp"
+#include "vector_math_utils.hpp"
+#include "QuadTree.hpp"
 
 #ifndef GAME_OBJECTS_HPP
 #define GAME_OBJECTS_HPP
@@ -12,8 +14,8 @@
 class GameObjects {
 public:
     std::vector<Satellite> bodies;
-
-    GameObjects() {};
+    Quadtree quadtree;
+    GameObjects(Quadtree quadtree) : quadtree(quadtree) {};
 
     void render(sf::RenderWindow& window) {
         for (Satellite& body : this->bodies) {
@@ -34,17 +36,17 @@ public:
 
     void update() {
         calculate_forces();
-        handle_collisions();
+        resolve_collisions();
     }
 
 private:
     void calculate_forces() {
+        const float bigG = 0.1f;
+        const float minDistance = 50.0f;
+        const float dampingFactor = 0.2f;
+        
         for (Satellite& body : bodies) {
             body.force = {0.0f, 0.0f};
-
-            float minDistance = 50.0f;
-            float dampingFactor = 0.2f;
-            float bigG = 0; // 0.1f;
 
             float forceX = 0.0f;
             float forceY = 0.0f;
@@ -58,7 +60,6 @@ private:
                 float dX = body2.position.x - body.position.x;
                 float dY = body2.position.y - body.position.y;
                 
-
                 float distanceSquared = dX * dX + dY * dY;
                 float distance = std::sqrt(distanceSquared);
 
@@ -80,11 +81,26 @@ private:
             sf::Vector2f force(forceX, forceY);
             body.force = force;
             body.update();
-
         }
     }
 
-    void handle_collisions() {  
+    /**
+    
+    v - velocity
+    m - mass
+    x - normal
+    v1f - velocity final
+    
+    Equation: 
+
+                2 * m2      (v2 - v1) * (x2 - x1)
+    v1f = v1 + -------- *  --------------------- * (x2 - x1)
+                m1 + m2         (x1 - x2)^2
+
+    */
+    void resolve_collisions() {  
+        const float EPSILON = 1e-6f;
+
         for (size_t i = 0; i < bodies.size(); i++) {
             for (size_t j = i + 1; j < bodies.size(); j++) {
                 Satellite& body1 = bodies[i];
@@ -92,30 +108,46 @@ private:
 
                 float dX = body1.position.x - body2.position.x;
                 float dY = body1.position.y - body2.position.y;
+                float normalMagnitude = std::sqrt(dX * dX + dY * dY);
 
-                float distance = std::sqrt(dX * dX + dY * dY);
+                if (normalMagnitude < EPSILON) continue;
 
+                // get the normal force
+                sf::Vector2f normalVector((dX / normalMagnitude), (dY / normalMagnitude));
+
+                // r1 + r2
                 float sumOfRadii = body1.body.getRadius() + body2.body.getRadius();
+                if (normalMagnitude + EPSILON >= sumOfRadii) continue;
 
-                if (distance < sumOfRadii) {
-                    // Calculate the overlap distance
-                    // float overlap = sumOfRadii - distance;
+                // v2 - v1
+                sf::Vector2f velocityDifference = body1.velocity - body2.velocity;
 
-                    // get normal direction
-                    // get relative mass
-                    // give that ratio of momentum to the object - it from the old one
+                // (2 x m2)
+                // ---------
+                //  m1 + m2
+                float massScaler = (2 * body2.mass) / (body1.mass + body2.mass);
 
-                    float collisionNormalX = dX / distance;
-                    float collisionNormalY = dY / distance;
 
-                    // find normal magnitude
-                    // share momentum on this vector
+                // (v2 - v1) * (x2 - x1)
+                float dotProductResult = dotProduct(velocityDifference, normalVector);
+                if (dotProductResult > 0) continue;
 
-                    float relativeMass = body1.mass / body2.mass + 1;
+                float massScaler1 = (2.0f * body2.mass) / (body1.mass + body2.mass);
+                float massScaler2 = (2.0f * body1.mass) / (body1.mass + body2.mass);
 
-                    body1.velocity += body2.velocity * relativeMass;
-                    body2.velocity -= body1.velocity * relativeMass;
-                }
+                sf::Vector2f impulse1 = normalVector * dotProductResult * massScaler1;
+                sf::Vector2f impulse2 = normalVector * dotProductResult * massScaler2;
+
+                body1.velocity -= impulse1;
+                body2.velocity += impulse2;
+
+
+
+                // Positional correction to prevent overlap
+                float penetrationDepth = sumOfRadii - normalMagnitude;
+                sf::Vector2f correctionVector = normalVector * (penetrationDepth / 2.0f);
+                body1.position += correctionVector;
+                body2.position -= correctionVector;
             }
         }
     }

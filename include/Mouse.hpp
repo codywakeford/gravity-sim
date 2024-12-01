@@ -12,6 +12,8 @@ class Mouse {
 private:
     float x, y;
     float radius;
+    int numberOfParticles = 1;
+
     sf::Color color = sf::Color::Blue;
     sf::CircleShape shape;
 
@@ -47,9 +49,8 @@ public:
                 break;
             default:
                 break;
-
-
         }
+        
         if (isDragging) {
             sf::Vector2i mousePos = sf::Mouse::getPosition(window);
             dragEnd = sf::Vector2f(mousePos.x, mousePos.y);
@@ -91,7 +92,9 @@ private:
 
     // Add a satellite to the scene on mouse release. //
     void createSatellite(sf::RenderWindow& window, sf::Vector2f velocity) {
-        gameObjects.add_satellite(radius, velocity, window);
+        for (int i = 0; i < numberOfParticles; i++) {
+            gameObjects.add_satellite((radius), velocity, window);
+        }
     }
 
     void startDrag(sf::RenderWindow& window) {
