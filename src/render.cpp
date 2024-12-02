@@ -7,6 +7,7 @@ void render(sf::RenderWindow& window) {
     window.clear(sf::Color::Black);
 
     mouse.render(window);
+    quadtree.render(window);
     gameObjects.render(window);
 
     window.display();

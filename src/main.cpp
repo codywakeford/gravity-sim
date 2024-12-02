@@ -8,8 +8,8 @@
 #include "QuadTree.hpp"
 
 
-Quadtree quadtree(Rectangle(0, 0, 200, 200));
-GameObjects gameObjects(quadtree);
+Quadtree quadtree(Rectangle(960, 540, 1920, 1080));
+GameObjects gameObjects;
 Mouse mouse;
 
 void awaitFrame(sf::Clock clock)
@@ -30,6 +30,8 @@ int main() {
     while (window.isOpen()) {
         processEvents(window);
         step(window);
+
+        
         render(window);
         awaitFrame(clock);
     }
