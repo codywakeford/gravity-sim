@@ -27,7 +27,7 @@ public:
         shape.setOrigin(radius, radius);
     }
 
-    void input(sf::Event& event, sf::RenderWindow& window) {
+    void input(sf::Event& event, sf::RenderWindow& window, GameObjects& gameObjects) {
         switch (event.type) {
             case sf::Event::MouseWheelScrolled:
                 changeSatelliteSize(event);
@@ -44,7 +44,7 @@ public:
             // Create satellite on release //
             case sf::Event::MouseButtonReleased:
                 if (event.mouseButton.button == sf::Mouse::Left) {
-                    endDrag(window);
+                    endDrag(window, gameObjects);
                 }
                 break;
             default:
@@ -91,7 +91,7 @@ private:
     }
 
     // Add a satellite to the scene on mouse release. //
-    void createSatellite(sf::RenderWindow& window, sf::Vector2f velocity) {
+    void createSatellite(sf::RenderWindow& window, sf::Vector2f velocity, GameObjects& gameObjects) {
         for (int i = 0; i < numberOfParticles; i++) {
             gameObjects.add_satellite((radius), velocity, window);
         }
@@ -103,18 +103,16 @@ private:
         isDragging = true;
     }
 
-    void endDrag(sf::RenderWindow& window) {
+    void endDrag(sf::RenderWindow& window, GameObjects& gameObjects) {
         float vX = dragStart.x - dragEnd.x;
         float vY = dragStart.y - dragEnd.y;
 
         sf::Vector2f velocity(vX, vY);
 
-        createSatellite(window, velocity * VELOCITY_MULTIPLYER);
+        createSatellite(window, velocity * VELOCITY_MULTIPLYER, gameObjects);
 
         isDragging = false;
     }
 };
-
-extern Mouse mouse;
 
 #endif // MOUSE_HPP

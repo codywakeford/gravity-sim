@@ -35,7 +35,7 @@ public:
         bodies.push_back(body);
     }
 
-    void update() {
+    void update(Quadtree& quadtree) {
         quadtree.clear();
         for (Satellite& body : bodies) {
             quadtree.insert(&body);

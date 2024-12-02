@@ -197,28 +197,7 @@ public:
 
         return false; 
     }
-
-    // Query points within a given range
-    // void query(const Rectangle& range, std::vector<Satellite*> found) const {
-    //     if (!boundary.intersects(range)) {
-    //         return;
-    //     }
-
-    //     for (Satellite* body : bodies) {
-    //         if (range.contains(*body)) {
-    //             found.push_back(body);
-    //         }
-    //     }
-
-    //     if (divided) {
-    //         northeast->query(range, found);
-    //         northwest->query(range, found);
-    //         southeast->query(range, found);
-    //         southwest->query(range, found);
-    //     }
-    // }
 };
 
-extern Quadtree quadtree;
 
 #endif

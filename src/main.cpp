@@ -1,39 +1,15 @@
 #include <SFML/Graphics.hpp>
-#include "inputs.cpp"
-#include "step.cpp"
-#include "render.cpp"
-#include "GameObjects.hpp" 
-#include "Mouse.hpp"
-#include "window.cpp"
-#include "QuadTree.hpp"
+#include "State.hpp"
 
 
-Quadtree quadtree(Rectangle(960, 540, 1920, 1080));
-GameObjects gameObjects;
-Mouse mouse;
-
-void awaitFrame(sf::Clock clock)
-{
-    sf::Time deltaTime = clock.restart();
-    if (deltaTime.asSeconds() < TIME_PER_FRAME) {
-        sf::sleep(sf::seconds(TIME_PER_FRAME - deltaTime.asSeconds()));
-    }
-    clock.restart();
-}
-
+State state;
 int main() {
 
-    window.setFramerateLimit(120);
-    sf::Clock clock;
-
-    // 120hz loop
-    while (window.isOpen()) {
-        processEvents(window);
-        step(window);
-
-        
-        render(window);
-        awaitFrame(clock);
+    while (state.window.isOpen()) {
+        state.handle_inputs(state.window);
+        state.update(state.window);
+        state.render(state.window);
+        state.awaitFrame();
     }
 
     return 0;
