@@ -2,13 +2,14 @@
 #include "Mouse.hpp"
 #include "GameObjects.hpp"
 #include "QuadTree.hpp"
+#include "Text.hpp"
 
 #ifndef STATE_HPP
 #define STATE_HPP
 
 int WINDOW_HEIGHT = 1080;
 int WINDOW_WIDTH = 1920;
-int FPS = 60;
+int FPS = 165;
 const float TIME_PER_FRAME = 1.0f / FPS;
 
 class State {
@@ -38,12 +39,16 @@ public:
         if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R) {
             gameObjects.clear();
         }
+        
+        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
+            isPaused = !isPaused;
+        }
 
         mouse.input(event, window, gameObjects);
     }
 
     void update(sf::RenderWindow& window) {
-        gameObjects.update(quadtree);
+        gameObjects.update(quadtree);   
     }
 
     void render(sf::RenderWindow& window) {
@@ -52,6 +57,7 @@ public:
         mouse.render(window);
         quadtree.render(window);
         gameObjects.render(window);
+        Text::renderAllText(window); 
 
         window.display();
     }

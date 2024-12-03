@@ -4,8 +4,18 @@
 #ifndef VECTOR_MATH_UTILS_HPP
 #define VECTOR_MATH_UTILS_HPP
 
-sf::Vector2f squareVec(const sf::Vector2f vector) {
-    return sf::Vector2f(vector.x * vector.x, vector.y * vector.y);
+sf::Vector2f& squareVec(sf::Vector2f& vector) {
+    vector.x *= vector.x;
+    vector.y *= vector.y;
+
+    return vector;
+}
+
+sf::Vector2f& scaleVec(sf::Vector2f& vector, float scaler) {
+    vector.x *= scaler;
+    vector.y *= scaler;
+
+    return vector;
 }
 
 sf::Vector2f divideVec(const sf::Vector2f vector1, const sf::Vector2f vector2) {

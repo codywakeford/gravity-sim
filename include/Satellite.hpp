@@ -27,6 +27,7 @@ public:
         body.setFillColor(color);
         body.setOrigin(radius, radius);
 
+        // Use area as radius //  
         mass = 3.14159f * radius * radius;
             
     }

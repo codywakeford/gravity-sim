@@ -20,9 +20,10 @@ v1f = v1 + -------- *  --------------------- * (x2 - x1)
             m1 + m2         (x1 - x2)^2
 
 */
+
 void resolve_collision(Satellite& body1, Satellite& body2) {
     const float EPSILON = 1e-6f;
-
+    const float COLLISION_DAMPENING = 0.9f;
     float dX = body1.position.x - body2.position.x;
     float dY = body1.position.y - body2.position.y;
     float normalMagnitude = std::sqrt(dX * dX + dY * dY);
@@ -55,10 +56,8 @@ void resolve_collision(Satellite& body1, Satellite& body2) {
     sf::Vector2f impulse1 = normalVector * dotProductResult * massScaler1;
     sf::Vector2f impulse2 = normalVector * dotProductResult * massScaler2;
 
-    body1.velocity -= impulse1;
-    body2.velocity += impulse2;
-
-
+    body1.velocity -= scaleVec(impulse1, COLLISION_DAMPENING);
+    body2.velocity += scaleVec(impulse2, COLLISION_DAMPENING);
 
     // Positional correction to prevent overlap
     float penetrationDepth = sumOfRadii - normalMagnitude;
