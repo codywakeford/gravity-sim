@@ -23,10 +23,6 @@ struct Rectangle {
     bool contains(const Satellite* body) const {
         if (!body) return false;
 
-        // print(x);
-        // print(y);
-        // print(width);
-        // print(height);
 
         return (
             body->position.x >= x - width / 2 && 
@@ -165,7 +161,7 @@ public:
     }
 
     bool insert(Satellite* body) {
-        print(bodies.size());  
+        // print(bodies.size());  
 
         if (!boundary.contains(body)) {
             return false;

@@ -22,7 +22,7 @@ public:
     Quadtree quadtree;
     sf::RenderWindow window;
     
-    bool isPaused = true;
+    bool isPaused = false;
 
     State() : window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Gravity"), quadtree(Rectangle(960, 540, 1920, 1080)) {
         window.setFramerateLimit(FPS);
@@ -32,23 +32,25 @@ public:
         sf::Event event;
 
         while (window.pollEvent(event)) {
+        // Check for key press events inside the event loop
             if (event.type == sf::Event::Closed)
                 window.close();
-        }
 
-        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R) {
-            gameObjects.clear();
-        }
-        
-        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
-            isPaused = !isPaused;
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R) {
+                gameObjects.clear();
+            }
+            
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
+                isPaused = !isPaused;
+            }
         }
 
         mouse.input(event, window, gameObjects);
     }
 
     void update(sf::RenderWindow& window) {
-        gameObjects.update(quadtree);   
+        gameObjects.update(quadtree);
+        Text::updateAllText();
     }
 
     void render(sf::RenderWindow& window) {

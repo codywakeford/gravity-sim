@@ -13,6 +13,10 @@
 
 class GameObjects {
 public:
+    const float bigG = 0.1f;
+    const float minDistance = 50.0f;
+    const float dampingFactor = 0.2f;
+
     std::vector<Satellite> bodies;
 
     GameObjects() {}
@@ -47,9 +51,7 @@ public:
 
 private:
     void calculate_forces() {
-        const float bigG = 0.1f;
-        const float minDistance = 50.0f;
-        const float dampingFactor = 0.2f;
+
         
         for (Satellite& body : bodies) {
             body.force = {0.0f, 0.0f};

@@ -7,11 +7,12 @@ sf::Font font;
 
 std::string myText = "Hello, world!";
 
-Text text(font,0, 0, "helllllo");
-Text pausedText(font, 900, 25, "PAUSED");
-Text bigG(font, 25, 25, "");
+bool hello = true;
 
 int main() {
+    Text bigG(font, 25, 25, "Big G", &hello, true);
+    Text pausedText(font, 900, 25, "PAUSED", &state.isPaused, true);
+    bigG.bindValue(&state.gameObjects.bigG);
 
     if (!font.loadFromFile("assets/Roboto-Regular.ttf")) {
         std::cerr << "Error: Could not load font!" << std::endl;
@@ -20,9 +21,11 @@ int main() {
 
     while (state.window.isOpen()) {
         state.handle_inputs(state.window);
-        state.update(state.window);
         state.render(state.window);
 
+        if (!state.isPaused) {
+            state.update(state.window);
+        }
         state.awaitFrame();
     }
 
