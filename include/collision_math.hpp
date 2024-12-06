@@ -45,7 +45,6 @@ void resolve_collision(Satellite& body1, Satellite& body2) {
     //  m1 + m2
     float massScaler = (2 * body2.mass) / (body1.mass + body2.mass);
 
-
     // (v2 - v1) * (x2 - x1)
     float dotProductResult = dotProduct(velocityDifference, normalVector);
     if (dotProductResult > 0) return;

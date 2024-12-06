@@ -22,14 +22,6 @@ public:
         texts.push_back(*this);
     };
 
-    // void bindConditional(bool& conditionToBind, bool displayWhen) {
-    //     std::cout << "Binding conditions" << conditionToBind << displayWhen << std::endl;
-    //     conditional = conditionToBind;
-    //     this->displayWhen = displayWhen;
-
-    //     std::cout << "conditions set "  << this->conditional << this->displayWhen << std::endl;
-    // }
-
     void bindValue(const void* valueToBind) {
         boundValue = valueToBind;
     }
@@ -37,21 +29,15 @@ public:
     void update() {
         std::cout << this->boundValue << std::endl;
         if (boundValue) {
-            // Check if the bound value is a std::string*
             if (const std::string* boundStr = static_cast<const std::string*>(boundValue)) {
-                // If it's a string, update the text with the string value
                 text.setString(*boundStr);
             }
-            // Check if the bound value is a float*
             else if (const float* boundFloat = static_cast<const float*>(boundValue)) {
-                // If it's a float, convert it to a string and update the text
                 std::string updatedString = "BigG: " + std::to_string(*boundFloat);
                 text.setString(updatedString);
             }
-            // You can add more types as needed (e.g., int*, double*, etc.)
         }
     }
-
 
     static void renderAllText(sf::RenderWindow& window) {
         for (const Text text : texts) {
