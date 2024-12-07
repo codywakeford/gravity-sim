@@ -33,7 +33,5 @@ run: all
 
 
 rerun: clean all
-	@echo ""
 	@echo "Rebuilding and Rerunning..."
-	@echo ""
 	./$(OBJ_DIR)/$(TARGET)
